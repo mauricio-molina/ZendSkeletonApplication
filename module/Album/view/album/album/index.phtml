@@ -1,0 +1,34 @@
+<?php
+// module/Album/view/album/album/index.phtml:
+
+$title = 'Concerto Dashboard';
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+<p>
+    <a href="<?= $this->url('album', ['action' => '']) ?>">CMS</a>
+    <a href="<?= $this->url('album', ['action' => 'add']) ?>">MDS</a>
+    <a href="<?= $this->url('album', ['action' => 'add']) ?>">Concerto API</a>
+    <a href="<?= $this->url('album', ['action' => 'add']) ?>">Content Registry</a>
+    <a href="<?= $this->url('album', ['action' => 'add']) ?>">Apps Web</a>
+    <a href="<?= $this->url('album', ['action' => 'add']) ?>">MongoDB</a>
+    <a href="<?= $this->url('album', ['action' => 'add']) ?>">Watchtower</a>
+</p>
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Artist</th>
+        <th>&nbsp;</th>
+    </tr>
+<!--    --><?php //foreach ($albums as $album) : ?>
+        <tr><?= print_r($albums) ?>
+            <td><?= $this->escapeHtml($albums->json) ?></td>
+            <td><?= $this->escapeHtml($albums->json) ?></td>
+            <td>
+                <a href="<?= $this->url('album', ['action' => 'edit', 'id' => $albums->json]) ?>">Edit</a>
+                <a href="<?= $this->url('album', ['action' => 'delete', 'id' => $albums->json]) ?>">Delete</a>
+            </td>
+        </tr>
+<!--    --><?php //endforeach; ?>
+</table>
