@@ -4,31 +4,66 @@
 $title = $id;
 $this->headTitle($title);
 ?>
-<h1><?= $this->escapeHtml($title) ?></h1>
-<p>
-    <a href="<?= $this->url('album', ['action' => 'view', 'id' => 'cms']) ?>">CMS</a>
-    <a href="<?= $this->url('album', ['action' => 'view', 'id' => 'mds']) ?>">MDS</a>
-    <a href="<?= $this->url('album', ['action' => 'view', 'id' => 'concerto_api']) ?>">Concerto API</a>
-    <a href="<?= $this->url('album', ['action' => 'view', 'id' => 'content_registry']) ?>">Content Registry</a>
-    <a href="<?= $this->url('album', ['action' => 'view', 'id' => 'apps_web']) ?>">Apps Web</a>
-    <a href="<?= $this->url('album', ['action' => 'view', 'id' => 'mongodb']) ?>">MongoDB</a>
-    <a href="<?= $this->url('album', ['action' => 'view', 'id' => 'watchtower']) ?>">Watchtower</a>
-</p>
 
-<table class="table">
-    <tr>
-        <th>Name</th>
-        <th>JSON</th>
-        <th>&nbsp;</th>
-    </tr>
-    <!--    --><?php //foreach ($albums as $album) : ?>
-    <tr>
-        <td><?= $this->escapeHtml($albums->json) ?></td>
-        <td><?= $this->escapeHtml('nothing here') ?></td>
-<!--        <td>-->
-<!--            <a href="--><?//= $this->url('album', ['action' => 'edit', 'id' => $albums->json]) ?><!--">Edit</a>-->
-<!--            <a href="--><?//= $this->url('album', ['action' => 'delete', 'id' => $albums->json]) ?><!--">Delete</a>-->
-<!--        </td>-->
-    </tr>
-    <!--    --><?php //endforeach; ?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+
+<?php if ($albums->ec2) : ?>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>JSON</th>
+            <th>&nbsp;</th>
+        </tr>
+        <!--    --><?php //foreach ($albums as $album) : ?>
+        <tr>
+            <td><?= $this->escapeHtml("EC2") ?></td>
+            <td><?= $this->escapeHtml($albums->ec2) ?></td>
+        </tr>
+        <!--    --><?php //endforeach; ?>
 </table>
+<?php endif; ?>
+
+
+<?php if ($albums->rds) : ?>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>JSON</th>
+            <th>&nbsp;</th>
+        </tr>
+        <!--    --><?php //foreach ($albums as $album) : ?>
+        <tr>
+            <td><?= $this->escapeHtml("RDS") ?></td>
+            <td><?= $this->escapeHtml($albums->rds) ?></td>
+        </tr>
+        <!--    --><?php //endforeach; ?>
+    </table>
+<?php endif; ?>
+
+
+<?php if ($albums->s3) : ?>
+    <table class= "table">
+        <tr>
+            <th>Name</th>
+            <th>JSON</th>
+        </tr>
+        <tr>
+            <td><?= $this->escapeHtml("S3") ?></td>
+            <td><?= $this->escapeHtml($albums->s3) ?></td>
+        </tr>
+    </table>
+<?php endif; ?>
+
+
+<?php if ($albums->sqs) : ?>
+    <table class= "table">
+        <tr>
+            <th>Name</th>
+            <th>JSON</th>
+        </tr>
+        <tr>
+            <td><?= $this->escapeHtml("SQS") ?></td>
+            <td><?= $this->escapeHtml($albums->sqs) ?></td>
+        </tr>
+    </table>
+<?php endif; ?>

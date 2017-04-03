@@ -26,7 +26,7 @@ class AlbumController extends AbstractActionController
 
         return new ViewModel([
             'albums' => $this->album,
-            'id' => $id,
+            'id' => strtoupper(str_replace('_', ' ', $id)),
         ]);
     }
 }
