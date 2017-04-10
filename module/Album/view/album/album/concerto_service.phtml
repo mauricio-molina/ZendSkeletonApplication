@@ -1,0 +1,89 @@
+<?php
+// module/Album/view/album/album/concerto_service.phtml:
+
+$title = $id;
+$this->headTitle($title);
+?>
+
+<h1><?= $this->escapeHtml($title) ?></h1>
+
+
+<?php foreach ($envs as $env) : ?>
+    <?php if ($albums->{$env}) : ?>
+        <h3><?= strtoupper($env) ?></h3>
+    <?php endif ?>
+
+    <?php if ($albums->{$env}->ec2) : ?>
+        <h4>EC2</h4>
+        <table class= table border="1">
+            <tr>
+                <?php foreach ($albums->{$env}->ec2[0] as $key => $val) : ?>
+                    <th> <?= $key ?></th>
+                <?php endforeach ?>
+            </tr>
+
+            <?php foreach ($albums->{$env}->ec2 as $object => $instance) : ?>
+                <tr>
+                    <?php foreach ($instance as $key => $val) : ?>
+                        <td> <?= $val ?> </td>
+                    <?php endforeach ?>
+                </tr>
+            <?php endforeach ?>
+        </table>
+    <?php endif ?>
+
+
+    <?php if ($albums->{$env}->rds) : ?>
+        <h4>RDS</h4>
+        <table class= table border="1">
+            <tr>
+                <?php foreach ($albums->{$env}->rds[0] as $key => $val) : ?>
+                    <th> <?= $key ?></th>
+                <?php endforeach ?>
+            </tr>
+
+            <?php foreach ($albums->{$env}->rds as $object => $instance) : ?>
+                <tr>
+                    <?php foreach ($instance as $key => $val) : ?>
+                        <td> <?= $val ?> </td>
+                    <?php endforeach ?>
+                </tr>
+            <?php endforeach ?>
+        </table>
+    <?php endif; ?>
+
+
+    <?php if ($albums->{$env}->sqs) : ?>
+        <H4>SQS</H4>
+        <?php foreach ($albums->{$env}->sqs->QueueUrls as $url) : ?>
+            <ul>
+                <li><?= $url ?></li>
+            </ul>
+        <?php endforeach ?>
+    <?php endif ?>
+
+<hr>
+
+
+<?php endforeach ?>
+
+<hr>
+
+<?php if ($albums->elasticache) : ?>
+    <H3>Elasticache</H3>
+    <table class= table border="1">
+        <tr>
+            <?php foreach ($albums->elasticache[0] as $key => $val) : ?>
+                <th> <?= $key ?></th>
+            <?php endforeach ?>
+        </tr>
+
+        <?php foreach ($albums->elasticache as $object => $instance) : ?>
+            <tr>
+                <?php foreach ($instance as $key => $val) : ?>
+                    <td> <?= $val ?> </td>
+                <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
+    </table>
+<?php endif ?>

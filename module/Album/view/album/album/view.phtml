@@ -7,63 +7,82 @@ $this->headTitle($title);
 
 <h1><?= $this->escapeHtml($title) ?></h1>
 
+
 <?php if ($albums->ec2) : ?>
-    <table class="table">
+    <table class= table border="1">
         <tr>
-            <th>Name</th>
-            <th>JSON</th>
-            <th>&nbsp;</th>
+            <?php foreach ($albums->ec2[0] as $key => $val) : ?>
+                <th> <?= $key ?></th>
+            <?php endforeach ?>
         </tr>
-        <!--    --><?php //foreach ($albums as $album) : ?>
-        <tr>
-            <td><?= $this->escapeHtml("EC2") ?></td>
-            <td><?= $this->escapeHtml($albums->ec2) ?></td>
-        </tr>
-        <!--    --><?php //endforeach; ?>
-</table>
+
+        <?php foreach ($albums->ec2 as $object => $instance) : ?>
+            <tr>
+            <?php foreach ($instance as $key => $val) : ?>
+                <td> <?= $val ?> </td>
+            <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
+    </table>
 <?php endif; ?>
+
 
 
 <?php if ($albums->rds) : ?>
-    <table class="table">
+    <table class= table border="1">
         <tr>
-            <th>Name</th>
-            <th>JSON</th>
-            <th>&nbsp;</th>
+            <?php foreach ($albums->rds[0] as $key => $val) : ?>
+                <th> <?= $key ?></th>
+            <?php endforeach ?>
         </tr>
-        <!--    --><?php //foreach ($albums as $album) : ?>
-        <tr>
-            <td><?= $this->escapeHtml("RDS") ?></td>
-            <td><?= $this->escapeHtml($albums->rds) ?></td>
-        </tr>
-        <!--    --><?php //endforeach; ?>
+
+        <?php foreach ($albums->rds as $object => $instance) : ?>
+            <tr>
+                <?php foreach ($instance as $key => $val) : ?>
+                    <td> <?= $val ?> </td>
+                <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
     </table>
 <?php endif; ?>
 
 
+
 <?php if ($albums->s3) : ?>
-    <table class= "table">
-        <tr>
-            <th>Name</th>
-            <th>JSON</th>
-        </tr>
-        <tr>
-            <td><?= $this->escapeHtml("S3") ?></td>
-            <td><?= $this->escapeHtml($albums->s3) ?></td>
-        </tr>
-    </table>
+    <?php foreach ($albums->s3 as $val) : ?>
+        <ul>
+            <li><?= $val ?></li>
+        </ul>
+    <?php endforeach ?>
 <?php endif; ?>
 
 
 <?php if ($albums->sqs) : ?>
-    <table class= "table">
+    <?php foreach ($albums->sqs->QueueUrls as $url) : ?>
+        <ul>
+            <li><?= $url ?></li>
+        </ul>
+    <?php endforeach ?>
+<?php endif; ?>
+
+
+<?php if ($albums->elasticache) : ?>
+    <table class= table border="1">
         <tr>
-            <th>Name</th>
-            <th>JSON</th>
+            <?php foreach ($albums->elasticache[0] as $key => $val) : ?>
+                <th> <?= $key ?></th>
+            <?php endforeach ?>
         </tr>
-        <tr>
-            <td><?= $this->escapeHtml("SQS") ?></td>
-            <td><?= $this->escapeHtml($albums->sqs) ?></td>
-        </tr>
+
+        <?php foreach ($albums->elasticache as $object => $instance) : ?>
+            <tr>
+                <?php foreach ($instance as $key => $val) : ?>
+                    <td> <?= $val ?> </td>
+                <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
     </table>
 <?php endif; ?>
+
+
+

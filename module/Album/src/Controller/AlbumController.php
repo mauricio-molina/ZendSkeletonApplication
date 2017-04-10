@@ -19,6 +19,7 @@ class AlbumController extends AbstractActionController
             'albums' => $this->album,
         ]);
     }
+
     public function viewAction()
     {
         $id = $this->params()->fromRoute('id', 0);
@@ -27,6 +28,23 @@ class AlbumController extends AbstractActionController
         return new ViewModel([
             'albums' => $this->album,
             'id' => strtoupper(str_replace('_', ' ', $id)),
+        ]);
+    }
+
+    public function concertoServiceAction()
+    {
+        $envs = ['dev','qa','load','stage','uat','prod'];
+        $id = $this->params()->fromRoute('id', 0);
+        $this->album->setJson($id);
+
+        foreach ($envs as $env) {
+            $this->album->envJson($env);
+        }
+
+        return new ViewModel([
+            'albums' => $this->album,
+            'id' => strtoupper(str_replace('_', ' ', $id)),
+            'envs' => $envs,
         ]);
     }
 }

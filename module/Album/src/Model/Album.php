@@ -4,18 +4,21 @@ namespace Album\Model;
 
 use Zend\Cache\Storage\Adapter\Memcached;
 
+CONST AWS_SERVICES = ['ec2','rds','s3','sqs','elasticache'];
+
 class Album
 {
     public $ec2;
 
     public $rds;
 
-    public function __construct()
+    public function __construct($ec2 = NULL, $rds = NULL, $s3 = NULL, $sqs = NULL, $elasticache = NULL)
     {
-        $this->ec2 = NULL;
-        $this->rds = NULL;
-        $this->s3 = NULL;
-        $this->sqs = NULL;
+        $this->ec2 = $ec2;
+        $this->rds = $rds;
+        $this->s3 = $s3;
+        $this->sqs = $sqs;
+        $this->elasticache = $elasticache;
     }
 
     public function setJson($id) {
@@ -23,24 +26,16 @@ class Album
         $cache->getOptions()->setServers('localhost', 11211);
         $cache->getOptions()->setTtl(60);
 
-        $aws_components = [
-            'ec2',
-            'rds',
-            's3',
-            'sqs',
-            'elasticache'
-        ];
-
-        print "Available:" . $cache->getTotalSpace() . "<br>";
-        print "Open:" . $cache->getAvailableSpace() . "<br><br>";
-
-        foreach ($aws_components as $component) {
-            $key = $id . '_' . $component;
+        foreach (AWS_SERVICES as $service) {
+            $key = $id . '_' . $service;
+print "oh" . "\n";
+print "my" . "\n";
 
             if ($cache->hasItem($key)) {
                 $json = $cache->getItem($key);
 
-                $this->{$component} = $json;
+                $decoded_json = json_decode($json);
+                $this->{$service} = $decoded_json;
 //                print $key . "memcached item exists." . "<br><br>";
             }
             else {
@@ -52,8 +47,53 @@ class Album
                 $cache->setItem($key, $data);
                 $json = $cache->getItem($key);
 
-                $this->{$component} = $json;
-             //   print "memcached item expired or doesn't exist" . "<br><br>";
+                $decoded_json = json_decode($json);
+                $this->{$service} = $decoded_json;
+//                print "memcached item expired or doesn't exist" . "<br><br>";
+            }
+        }
+    }
+
+    public function envJson($env) {
+        $this->{$env} = NULL;
+        foreach (AWS_SERVICES as $aws_service) {
+            if ($this->$aws_service) {
+                if ($aws_service == 'ec2') {
+                    $data = NULL;
+                    foreach ($this->$aws_service as $object => $instance) {
+                        if ($instance->Environment == $env) {
+                            $data[] = $instance;
+                        }
+                    }
+                }
+                elseif ($aws_service == 'rds') {
+                    $data = NULL;
+                    // Account for naming conventions with load environment.
+                    $env2 = ($env == 'load' ? 'lt': '');
+                    foreach ($this->$aws_service as $object => $instance) {
+                        if (strpos($instance->Identifier, $env) !== false || strpos($instance->Identifier, $env2) !== false) {
+                            $data[] = $instance;
+                        }
+                    }
+                    if ($env == 'load') {
+
+                    }
+                }
+                elseif ($aws_service == 'sqs') {
+                    $data = NULL;
+                    foreach ($this->$aws_service->QueueUrls as $var) {
+
+                        if (strpos(strtolower($var), $env) !== FALSE) {
+                            $new_var = explode("/", $var);
+                            $data->QueueUrls[] = end($new_var);
+                        }
+                    }
+                }
+
+                // Set the data for the aws service and environment.
+                if ($data != NULL) {
+                    $this->$env->$aws_service = $data;
+                }
             }
         }
     }
