@@ -55,15 +55,32 @@ $this->headTitle($title);
 
     <?php if ($albums->{$env}->sqs) : ?>
         <H4>SQS</H4>
-        <?php foreach ($albums->{$env}->sqs->QueueUrls as $url) : ?>
-            <ul>
-                <li><?= $url ?></li>
-            </ul>
-        <?php endforeach ?>
+        <?php if ($albums->{$env}->sqs->queues) : ?>
+            <table class = table border="1">
+                <tr>
+                    <?php foreach ($albums->{$env}->sqs->queues[0][0] as $key => $val) : ?>
+                        <th> <?= ucfirst($key) ?></th>
+                    <?php endforeach ?>
+                </tr>
+
+                <?php foreach ($albums->{$env}->sqs->queues as $key => $val) : ?>
+                    <?php foreach ($val[0] as $key1 => $val1) : ?>
+                        <td> <?= $val1 ?> </td>
+                    <?php endforeach ?>
+                <?php endforeach ?>
+            </table>
+        <?php else : ?>
+            <?php foreach ($albums->{$env}->sqs->QueueUrls as $url) : ?>
+                <ul>
+                    <li><?= $url ?></li>
+                </ul>
+            <?php endforeach ?>
+        <?php endif ?>
     <?php endif ?>
 
 <hr>
-
+<hr>
+<hr>
 
 <?php endforeach ?>
 

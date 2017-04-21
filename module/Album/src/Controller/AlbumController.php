@@ -38,7 +38,7 @@ class AlbumController extends AbstractActionController
         $this->album->setJson($id);
 
         foreach ($envs as $env) {
-            $this->album->envJson($env);
+            $this->album->envJson($env, $id);
         }
 
         return new ViewModel([

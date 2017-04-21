@@ -5,6 +5,7 @@ namespace Album\Model;
 use Zend\Cache\Storage\Adapter\Memcached;
 
 CONST AWS_SERVICES = ['ec2','rds','s3','sqs','elasticache'];
+CONST CMS_BRANDS = ['bravo','chiller','cnbc','eonline','esquire','msnbc','nbcuniverso','oxygen','seeso','sprout','syfy','telemundo','usa'];
 
 class Album
 {
@@ -54,7 +55,7 @@ print "my" . "\n";
         }
     }
 
-    public function envJson($env) {
+    public function envJson($env, $id) {
         $this->{$env} = NULL;
         foreach (AWS_SERVICES as $aws_service) {
             if ($this->$aws_service) {
@@ -87,6 +88,18 @@ print "my" . "\n";
                             $new_var = explode("/", $var);
                             $data->QueueUrls[] = end($new_var);
                         }
+                    }
+
+                    if ($id == 'cms') {
+                        // TODO: loop through brands for this env.
+//                        foreach (CMS_BRANDS as $cms_brand) {
+//                            $response = file_get_contents("http://" . $env . ".tvecms." . $cms_brand . ".nbcuni.com/sqs_app_config");
+//                            if ($response !=) {
+//
+//                            }
+//                            $data->queues[] = json_decode($response);
+//                        }
+                        $data->queues[] = json_decode(file_get_contents("http://tve_ott_cms-1858.bravo.pr.tve_ott_cms.nbcuni.com/sqs_app_config"));
                     }
                 }
 
